@@ -1,4 +1,4 @@
-Dir['./lib/**/*.rb'].each { |f| require f }
+Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each { |f| require f }
 
 class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
 
