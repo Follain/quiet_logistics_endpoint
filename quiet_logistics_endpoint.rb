@@ -9,6 +9,11 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
                secret_access_key: @config['amazon_secret_key']) if request.request_method == 'POST'
   end
 
+  def result(code, message)
+    puts message
+    super
+  end
+
   post '/get_messages' do
     begin
       queue = @config['ql_incoming_queue']
