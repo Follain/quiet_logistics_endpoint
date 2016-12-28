@@ -77,7 +77,9 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
   post '/add_product' do
     begin
       item    = @payload['product']
-      message = Api.send_document('ItemProfile', item, outgoing_bucket, outgoing_queue, @config)
+      message = item['variants'].map do |variant|
+        Api.send_document('ItemProfile', item.merge(variant), outgoing_bucket, outgoing_queue, @config)
+      end.join("\n")
       code    = 200
     rescue => e
       message = e.message
