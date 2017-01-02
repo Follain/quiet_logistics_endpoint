@@ -22,6 +22,8 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
       receiver.receive_messages { |msg| add_object :message, msg }
 
       message  = "recevied #{receiver.count} messages"
+
+      add_value 'messages', [] if receiver.count < 1
       code     = 200
     rescue => e
       message  = e.message
@@ -40,7 +42,14 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
       if data.type == :unknown
         message = "Cannot handle document of type #{msg['document_type']}"
       else
-        add_object(data.type.to_sym, data.to_h)
+        if data.respond_to?(:to_a)
+          data.to_a.each do |h|
+            add_object(data.type.to_sym, h)
+          end
+        else
+          add_object(data.type.to_sym, data.to_h)
+        end
+
         message  = "Got Data for #{msg['document_name']}"
       end
 

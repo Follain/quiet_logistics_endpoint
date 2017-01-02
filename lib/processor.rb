@@ -32,6 +32,8 @@ class Processor
       Documents::RMAResult.new(data)
     when 'InventoryEventMessage'
       Documents::InventoryAdjustment.new(data)
+    when 'InventorySummaryReady'
+      Documents::InventorySummary.new(data)
     else
       Struct.new(:type).new(:unknown)
     end
