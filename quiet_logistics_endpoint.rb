@@ -41,6 +41,8 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
 
       if data.type == :unknown
         message = "Cannot handle document of type #{msg['document_type']}"
+      elsif data.type == :error
+        message = "Error document: #{msg}"
       else
         if data.respond_to?(:to_a)
           data.to_a.each do |h|

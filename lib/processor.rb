@@ -8,7 +8,7 @@ class Processor
     name = msg['document_name']
     type = msg['document_type']
 
-    if type == 'InventoryEventMessage'
+    if %w(InventoryEventMessage error).include? type
       data = msg
     else
       downloader = Downloader.new(@bucket)
@@ -34,6 +34,8 @@ class Processor
       Documents::InventoryAdjustment.new(data)
     when 'InventorySummaryReady'
       Documents::InventorySummary.new(data)
+    when 'error'
+      Struct.new(:type).new(:error)
     else
       Struct.new(:type).new(:unknown)
     end
