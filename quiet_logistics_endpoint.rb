@@ -14,6 +14,14 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
     super
   end
 
+  def add_object(key, value)
+    if value.kind_of? Hash
+      value['channel'] = 'Quiet'
+    end
+
+    super
+  end
+
   post '/get_messages' do
     begin
       queue = @config['ql_incoming_queue']
