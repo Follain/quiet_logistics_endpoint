@@ -1,14 +1,10 @@
 source "https://rubygems.org"
 
-gem 'honeybadger'
-gem 'nokogiri'
-gem 'aws-sdk-v1'
-gem 'timecop'
-gem 'multi_json'
-gem 'sinatra'
-gem 'tilt', '~> 1.4.1'
-gem 'tilt-jbuilder', require: 'sinatra/jbuilder'
-gem 'endpoint_base', github: 'spree/endpoint_base'
+ruby "2.3.1"
+
+gemspec
+
+gem 'endpoint_base', git: 'https://github.com/Follain/endpoint_base'
 
 group :test do
   gem 'rspec'

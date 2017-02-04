@@ -1,7 +1,7 @@
 require 'bundler'
 
 Bundler.require(:default)
-require "./quiet_logistics_endpoint"
+require "./lib/quiet_logistics_endpoint"
 
 run QuietLogisticsEndpoint
 

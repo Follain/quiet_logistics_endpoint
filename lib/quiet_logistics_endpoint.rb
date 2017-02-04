@@ -1,7 +1,9 @@
+require 'sinatra'
+require 'endpoint_base'
+
 Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each { |f| require f }
 
 class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
-
   set :logging, true
 
   before do
