@@ -58,6 +58,8 @@ module Documents
         :warehouse => "DVN",
         :status => "shipped",
         :business_unit => "BONOBOS",
+        :carrier => "UPS",
+        :service_level => "GROUND",
         :shipped_at => "2015-02-24T15:51:31.0953088Z",
         :cartons => [
           {

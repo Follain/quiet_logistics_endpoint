@@ -66,6 +66,7 @@ module Documents
     end
 
     def bill_to_hash
+      @shipment['billing_address'] ||= {}
       {
         'Company'    => full_name,
         'Contact'    => @shipment['billing_address']['contact'],

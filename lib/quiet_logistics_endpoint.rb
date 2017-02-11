@@ -1,7 +1,9 @@
+require 'aws'
 require 'sinatra'
+require 'nokogiri'
 require 'endpoint_base'
 
-Dir[File.dirname(__FILE__) + '/lib/**/*.rb'].each { |f| require f }
+Dir[File.dirname(__FILE__) + '/../lib/**/*.rb'].each { |f| require f }
 
 class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
   set :logging, true

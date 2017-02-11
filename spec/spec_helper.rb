@@ -9,7 +9,7 @@ require 'rubygems'
 
 Bundler.require(:default, :test, :development)
 
-require_relative '../quiet_logistics_endpoint.rb'
+require_relative '../lib/quiet_logistics_endpoint.rb'
 
 Dir['./spec/support/**/*.rb'].each { |f| require f }
 AWS.config(access_key_id: '123', secret_access_key: '123')
