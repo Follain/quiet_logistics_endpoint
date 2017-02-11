@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.test_files = `git ls-files spec/`.split("\n")
 
   s.add_runtime_dependency 'sinatra'
-  s.add_runtime_dependency 'tilt', '~> 1.4.1'
+  s.add_runtime_dependency 'tilt'
   s.add_runtime_dependency 'tilt-jbuilder'
   s.add_runtime_dependency 'multi_json'
   s.add_runtime_dependency 'nokogiri'
