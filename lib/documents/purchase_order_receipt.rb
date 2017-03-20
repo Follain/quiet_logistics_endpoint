@@ -2,7 +2,9 @@ module Documents
   class PurchaseOrderReceipt
     attr_reader :type
 
-    def initialize(xml)
+    def initialize(xml,name)
+     
+      @doc_name = name
       @doc = Nokogiri::XML(xml).remove_namespaces!
       @type = :purchase_order
       @business_unit = @doc.xpath("//@BusinessUnit").first.text
@@ -11,6 +13,7 @@ module Documents
 
     def to_h
       {
+        doc_name: @doc_name,
         id: @po_number,
         status: 'received',
         business_unit: @business_unit,

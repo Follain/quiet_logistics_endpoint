@@ -12,6 +12,7 @@ module Documents
   	end
 
   	def to_xml
+      
   		builder = Nokogiri::XML::Builder.new do |xml|
         xml.PurchaseOrderMessage('xmlns'        => 'http://schemas.quietlogistics.com/V2/PurchaseOrder.xsd',
                                  'ClientID'     => @config['client_id'],
@@ -20,7 +21,7 @@ module Documents
           xml.POHeader('Comments'     => @purchase_order['comments'],
                        'AltPoNumber'  => @purchase_order['alt_po_number'],
                        'PoNumber'     => @po_number,
-                       'OrderDate'    => @purchase_order['arrival_date']) {
+                       'OrderDate'    => @purchase_order['orderdate']) {
 
             xml.Vendor('ID'         => @purchase_order['vendor']['vendorid'],
                        'Company'    => @purchase_order['vendor']['name'],

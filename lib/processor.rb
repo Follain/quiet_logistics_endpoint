@@ -17,17 +17,17 @@ class Processor
 
     # downloader.delete_file(name)
 
-    parse_doc(type, data)
+    parse_doc(type, data,name)
   end
 
   private
 
-  def parse_doc(type, data)
+  def parse_doc(type, data,name)    
     case type
     when 'ShipmentOrderResult'
       Documents::ShipmentOrderResult.new(data)
     when 'PurchaseOrderReceipt'
-      Documents::PurchaseOrderReceipt.new(data)
+      Documents::PurchaseOrderReceipt.new(data,name)
     when 'RMAResultDocument'
       Documents::RMAResult.new(data)
     when 'InventoryEventMessage'
