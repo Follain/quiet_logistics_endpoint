@@ -132,6 +132,19 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
     result code, message
   end
 
+  post '/add_product_simple' do
+    begin
+      item    = @payload['product']
+      Api.send_document('ItemProfile', item, outgoing_bucket, outgoing_queue, @config)
+      code    = 200
+    rescue => e
+      message = e.message
+      code    = 500
+    end
+
+    result code, message
+    end
+
   post '/add_rma' do
     begin
       shipment = @payload['rma']
