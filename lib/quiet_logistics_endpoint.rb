@@ -158,6 +158,19 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
     result code, message
   end
 
+  post '/inventory_summary' do
+    begin
+      message  = Api.send_document('InventorySummaryRequest', nil, outgoing_bucket, outgoing_queue, @config)
+      add_value 'inventory_summaries', []
+      code     = 200
+    rescue => e
+      message  = e.message
+      code     = 500
+    end
+
+    result code, message
+  end
+
   def outgoing_queue
     @config['ql_outgoing_queue']
   end

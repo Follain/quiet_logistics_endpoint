@@ -12,6 +12,8 @@ class Api
       Documents::ItemProfile.new(content, config)
     when 'RMADocument'
       Documents::RMA.new(content, config)
+    when 'InventorySummaryRequest'
+      Documents::InventorySummaryRequest.new(config)
     end
 
     uploader = Uploader.new(bucket)
