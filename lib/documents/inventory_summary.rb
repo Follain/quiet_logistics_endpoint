@@ -26,11 +26,18 @@ module Documents
           location: warehouse,
           business_unit: business_unit,
           product_id: inventory['ItemNumber'],
-          quantity: with_status(inventory, 'Avail'),
-          received: with_status(inventory, 'RECEIVED'),
-          allocated: with_status(inventory, 'Alloc')
+          allocated: with_status(inventory, 'Alloc'),
+          available: with_status(inventory, 'Avail'),
+          damaged: with_status(inventory, 'DAM'),
+          quantity: quantity(inventory),
+          received: with_status(inventory, 'RECEIVED')
         }
       end
+    end
+
+    def quantity(inventory)
+      with_status(inventory, 'Avail').to_i +
+        with_status(inventory, 'RECEIVED').to_i
     end
 
     def with_status(inventory, status)
