@@ -31,6 +31,7 @@ module Documents
             xml.BillTo(bill_to_hash)
 
             xml.Notes('NoteType' => @shipment['note_type'].to_s, 'NoteValue' => @shipment['note_value'].to_s)
+            xml.Gift(true) if @shipment['gift']
           }
 
           @shipment['items'].each_with_index.map do |item, i|
