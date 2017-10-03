@@ -18,7 +18,9 @@ module Documents
 
           xml.OrderHeader('OrderNumber' => @shipment_number,
                           'OrderType'   => @shipment['order_type'] || 'SO',
-                          'OrderDate'   => DateTime.now.iso8601) {
+                          'OrderDate'   => DateTime.now.iso8601,
+                          'Gift' => !!@shipment['gift']
+                         ) {
 
             xml.Extension shipment['order_number']
 
