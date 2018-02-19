@@ -2,26 +2,24 @@ module Documents
   class PurchaseOrder
     attr_reader :name, :unit
 
-  	def initialize(purchase_order, config)
-  		@purchase_order = purchase_order
+    def initialize(purchase_order, config)
+      @purchase_order = purchase_order
       @config         = config
       @po_number      = purchase_order['id']
       @unit           = purchase_order['business_unit']
       @name           = "#{@config['business_unit']}_PurchaseOrder_#{@po_number}_#{date_stamp}.xml"
+    end
 
-  	end
-
-  	def to_xml
-      
-  		builder = Nokogiri::XML::Builder.new do |xml|
+    def to_xml
+      builder = Nokogiri::XML::Builder.new do |xml|
         xml.PurchaseOrderMessage('xmlns'        => 'http://schemas.quietlogistics.com/V2/PurchaseOrder.xsd',
                                  'ClientID'     => @config['client_id'],
-                                 'BusinessUnit' => @config['business_unit']) {
+                                 'BusinessUnit' => @config['business_unit']) do
 
           xml.POHeader('Comments'     => @purchase_order['comments'],
                        'AltPoNumber'  => @purchase_order['alt_po_number'],
                        'PoNumber'     => @po_number,
-                       'OrderDate'    => @purchase_order['orderdate']) {
+                       'OrderDate'    => @purchase_order['orderdate']) do
 
             xml.Vendor('ID'         => @purchase_order['vendor']['vendorid'],
                        'Company'    => @purchase_order['vendor']['name'],
@@ -33,23 +31,22 @@ module Documents
                        'Country'    => @purchase_order['vendor']['country'],
                        'Email'      => @purchase_order['vendor']['email'],
                        'PostalCode' => @purchase_order['vendor']['postal_code'])
-          }
+          end
 
           @purchase_order['line_items'].each do |line_item|
-
-            xml.PODetails('Line'            => line_item['line_number'],
-                          'ItemNumber'      => line_item["itemno"],
+            xml.PODetails('Line' => line_item['line_number'],
+                          'ItemNumber'      => line_item['itemno'],
                           'ItemDescription' => line_item['description'],
                           'OrderQuantity'   => line_item['quantity'],
                           'UnitCost'        => line_item['unit_price'])
           end
-        }
+        end
       end
       builder.to_xml
     end
 
     def message
-      "Succesfully Sent Purchase Order to QL"
+      'Succesfully Sent Purchase Order to QL'
     end
 
     def date_stamp

@@ -3,18 +3,20 @@ module Documents
     attr_reader :type
 
     def initialize(xml,name)
-     
+
       @doc_name = name
       @doc = Nokogiri::XML(xml).remove_namespaces!
       @type = :purchase_order
       @business_unit = @doc.xpath("//@BusinessUnit").first.text
       @po_number = @doc.xpath("//@PONumber").first.value
+      @alt_ponumber = @doc.xpath("//@AltPONumber").first.value
     end
 
     def to_h
       {
         doc_name: @doc_name,
         id: @po_number,
+        alt_ponumber: @alt_ponumber,
         status: 'received',
         business_unit: @business_unit,
         line_items: assemble_items,

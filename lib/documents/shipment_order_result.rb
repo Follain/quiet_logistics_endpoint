@@ -54,6 +54,7 @@ module Documents
         carrier: @carrier,
         service_level: @service_level,
         cartons: cartons_to_h,
+        line_items: line_items_to_h
       }
     end
 
@@ -66,6 +67,16 @@ module Documents
           :id => carton['CartonId'],
           :tracking => carton['TrackingId'],
           :line_items => carton_line_items_to_h(carton),
+        }
+      end
+    end
+
+    def line_items_to_h
+      lines = @doc.xpath('ql:SOResult/ql:Line', 'ql' => NAMESPACE)
+      lines.map do |line|
+        {
+          itemno: line['ItemNumber'],
+          quantity: line['Quantity']
         }
       end
     end
