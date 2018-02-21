@@ -9,8 +9,10 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
   set :logging, true
 
   before do
-    AWS.config(access_key_id: @config['amazon_access_key'],
-               secret_access_key: @config['amazon_secret_key']) if request.request_method == 'POST'
+    if request.request_method == 'POST'
+      AWS.config(access_key_id: @config['amazon_access_key'],
+                 secret_access_key: @config['amazon_secret_key'])
+    end
   end
 
   def result(code, message)
@@ -19,9 +21,7 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
   end
 
   def add_object(key, value)
-    if value.kind_of? Hash
-      value['channel'] = 'Quiet'
-    end
+    value['channel'] = 'Quiet' if value.is_a? Hash
 
     super
   end
@@ -33,11 +33,11 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
       receiver = Receiver.new(queue)
       receiver.receive_messages { |msg| add_object :message, msg }
 
-      message  = "recevied #{receiver.count} messages"
+      message = "recevied #{receiver.count} messages"
 
       add_value 'messages', [] if receiver.count < 1
       code     = 200
-    rescue => e
+    rescue StandardError => e
       message  = e.message
       code     = 500
     end
@@ -64,11 +64,11 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
           add_object(data.type.to_sym, data.to_h)
         end
 
-        message  = "Got Data for #{msg['document_name']}"
+        message = "Got Data for #{msg['document_name']}"
       end
 
       code = 200
-    rescue => e
+    rescue StandardError => e
       message  = e.message
       code     = 500
     end
@@ -81,7 +81,7 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
       shipment = @payload['shipment']
       message  = Api.send_document('ShipmentOrder', shipment, outgoing_bucket, outgoing_queue, @config)
       code     = 200
-    rescue => e
+    rescue StandardError => e
       message = e.message
       code    = 500
     end
@@ -90,45 +90,23 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
   end
 
   post '/add_purchase_order' do
-
     begin
-      order   = @payload['purchase_order']
+      order = if @payload['transfer_order'].present?
+                @payload['transfer_order']
+              elsif @payload['work_order'].present?
+                @payload['work_order']
+              else
+                @payload['purchase_order']
+        end
       message = Api.send_document('PurchaseOrder', order, outgoing_bucket, outgoing_queue, @config)
       code    = 200
-    rescue => e
+    rescue StandardError => e
       message = e.message
       code    = 500
     end
 
     result code, message
   end
-
-  post '/add_transfer_order' do
-    begin
-      order   = @payload['transfer_order']
-      message = Api.send_document('PurchaseOrder', order, outgoing_bucket, outgoing_queue, @config)
-      code    = 200
-    rescue => e
-      message = e.message
-      code    = 500
-    end
-
-    result code, message
-  end
-
-  post '/add_work_order' do
-    begin
-      order   = @payload['work_order']
-      message = Api.send_document('PurchaseOrder', order, outgoing_bucket, outgoing_queue, @config)
-      code    = 200
-    rescue => e
-      message = e.message
-      code    = 500
-    end
-
-    result code, message
-  end
-
 
   post '/add_product' do
     begin
@@ -137,7 +115,7 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
         Api.send_document('ItemProfile', item.merge(variant), outgoing_bucket, outgoing_queue, @config)
       end.join("\n")
       code    = 200
-    rescue => e
+    rescue StandardError => e
       message = e.message
       code    = 500
     end
@@ -147,23 +125,23 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
 
   post '/add_product_simple' do
     begin
-      item    = @payload['product']
+      item = @payload['product']
       Api.send_document('ItemProfile', item, outgoing_bucket, outgoing_queue, @config)
       code    = 200
-    rescue => e
+    rescue StandardError => e
       message = e.message
       code    = 500
     end
 
     result code, message
-    end
+  end
 
   post '/add_rma' do
     begin
       shipment = @payload['rma']
       message  = Api.send_document('RMADocument', shipment, outgoing_bucket, outgoing_queue, @config)
       code     = 200
-    rescue => e
+    rescue StandardError => e
       message  = e.message
       code     = 500
     end
@@ -176,7 +154,7 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
       message  = Api.send_document('InventorySummaryRequest', nil, outgoing_bucket, outgoing_queue, @config)
       add_value 'inventory_summaries', []
       code     = 200
-    rescue => e
+    rescue StandardError => e
       message  = e.message
       code     = 500
     end
