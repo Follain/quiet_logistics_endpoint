@@ -9,7 +9,8 @@ module Documents
       @type = :purchase_order
       @business_unit = @doc.xpath("//@BusinessUnit").first.text
       @po_number = @doc.xpath("//@PONumber").first.value
-      @alt_ponumber = @doc.xpath("//@AltPONumber").first.value
+      #manually entered pos tend not to have alt po number filled in
+      @alt_ponumber = @doc.xpath("//@AltPONumber").first&.value || @po_number
     end
 
     def to_h
