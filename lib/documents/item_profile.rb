@@ -4,10 +4,9 @@ module Documents
 
     def initialize(item, config)
       @item = item
-      item['upc'] ||= item['sku']
       @config = config
       @unit = config['business_unit']
-      @name = "#{@unit}_ItemProfile_#{item['sku']}_#{date_stamp}.xml"
+      @name = '#{@unit}_ItemProfile_#{item["sku"]}_#{date_stamp}.xml'
     end
 
     def to_xml
@@ -16,8 +15,8 @@ module Documents
           xml.ItemProfile('ClientID' => @config['client_id'],
             'BusinessUnit' => @unit,
             'ItemNo' => item['sku'],
-            'StockWgt' => "1.0000",
-            'StockUOM' => "EA",
+            'StockWgt' => '1.0000',
+            'StockUOM' => 'EA',
             'ImageUrl' => image_url,
             'ItemSize' => item['item_size'],
             'ItemMaterial' => item['material'],
@@ -25,10 +24,10 @@ module Documents
             'ItemDesc' => item_desc,
             'CommodityClass' => item['commodity_class'],
             'CommodityDesc' => item_desc,
-            'UPCno' => item['upc'],
-            'VendorName' => brand,
+            'UPCno' => item['sku'],
+            'VendorName' => item['brand'],
             'VendorItemNo' => item['vendor_item_no']) {
-              xml.UnitQuantity('BarCode' => item['upc'], 'Quantity' => '1', 'UnitOfMeasure' => 'EA')
+              xml.UnitQuantity('BarCode' => item['sku'], 'Quantity' => '1', 'UnitOfMeasure' => 'EA')
             }
         }
       end
@@ -36,23 +35,21 @@ module Documents
     end
 
     def item_desc
-      [brand, item["name"], options].compact.join(" / ")
+      [item['name'], options].compact.join(' / ')
     end
 
     def options
-      item["options"].map{|k,v| [k,v].join(": ")}.join(" ") if item["options"]
-    end
-
-    def brand
-      Hash[item["taxons"].map{|a| [a.first, a.last]}]["Brand"]
+      item['options_value']
     end
 
     def color
-      item["options"]["Color"]
+      if item['option_value'] !='def'
+         item['option_value']
+      end
     end
 
     def image_url
-      item["images"].first["url"] if item["images"].any?
+      item['image']
     end
 
     def date_stamp
@@ -60,7 +57,7 @@ module Documents
     end
 
     def message
-      "ItemProfile Document Successfuly Sent:\n#{to_xml}"
+      'ItemProfile Document Successfuly Sent:\n#{to_xml}'
     end
   end
 end
