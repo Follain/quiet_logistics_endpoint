@@ -112,7 +112,7 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
     begin
       item    = @payload['product']
       message = item['variants'].map do |variant|
-        Api.send_document('ItemProfile', item.merge(variant), outgoing_bucket, outgoing_queue, @config)
+        Api.send_document('ItemProfile', variant, outgoing_bucket, outgoing_queue, @config)
       end.join("\n")
       code    = 200
     rescue StandardError => e
