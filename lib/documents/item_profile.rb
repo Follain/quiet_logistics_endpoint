@@ -18,9 +18,9 @@ module Documents
             'StockWgt' => '1.0000',
             'StockUOM' => 'EA',
             'ImageUrl' => image_url,
-            'ItemSize' => item['item_size'],
+            'ItemSize' => item['size'],
             'ItemMaterial' => item['material'],
-            'ItemColor' => color,
+            'ItemColor' => item['color'],
             'ItemDesc' => item_desc,
             'CommodityClass' => item['commodity_class'],
             'CommodityDesc' => item_desc,
@@ -35,17 +35,7 @@ module Documents
     end
 
     def item_desc
-      [item['name'], options].compact.join(' / ')
-    end
-
-    def options
-      item['options_value']
-    end
-
-    def color
-      if item['option_value'] !='def'
-         item['option_value']
-      end
+      item['name'] + item['option_value']
     end
 
     def image_url
