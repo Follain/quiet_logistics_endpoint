@@ -35,7 +35,7 @@ module Documents
     end
 
     def item_desc
-      item['name'] + item['option_value']
+      item['name'] + item['option_value'].to_s
     end
 
     def image_url
