@@ -47,7 +47,7 @@ module Documents
     end
 
     def message
-      'ItemProfile Document Successfuly Sent:\n#{to_xml}'
+      "ItemProfile Document Successfuly Sent:\n#{to_xml}"
     end
   end
 end
