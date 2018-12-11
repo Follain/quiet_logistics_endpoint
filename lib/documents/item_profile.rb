@@ -6,7 +6,7 @@ module Documents
       @item = item
       @config = config
       @unit = config['business_unit']
-      @name = '#{@unit}_ItemProfile_#{item["sku"]}_#{date_stamp}.xml'
+      @name = "#{@unit}_ItemProfile_#{item["sku"]}_#{date_stamp}.xml"
     end
 
     def to_xml
