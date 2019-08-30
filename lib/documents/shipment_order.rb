@@ -6,19 +6,20 @@ module Documents
       @config          = config
       @shipment        = shipment
       @shipment_number = shipment['id']
+      @order_number    = shipment['order_number']
       @name            = "#{@config['business_unit']}_ShipmentOrder_#{@shipment_number}_#{date_stamp}.xml"
     end
 
     def to_xml
       builder = Nokogiri::XML::Builder.new do |xml|
         xml.ShipOrderDocument('xmlns' => 'http://schemas.quietlogistics.com/V2/ShipmentOrder.xsd') {
-
           xml.ClientID @config['client_id']
           xml.BusinessUnit @config['business_unit']
 
           xml.OrderHeader('OrderNumber' => @shipment_number,
                           'OrderType'   => @shipment['order_type'] || 'SO',
                           'OrderDate'   => DateTime.now.iso8601,
+                          'CustomerPO'  => @order_number,
                           'Gift' => !!@shipment['gift']
                          ) {
 

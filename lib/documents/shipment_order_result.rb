@@ -32,6 +32,7 @@ module Documents
       @doc = Nokogiri::XML(xml)
       @type = :shipment
       @shipment_number = @doc.xpath("//@OrderNumber").first.text
+      @customer_po = @doc.xpath('ql:SOResult/ql:Extension', 'ql' => NAMESPACE).first.text
       @date_shipped = @doc.xpath("//@DateShipped").first.text
       @freight_cost = @doc.xpath("//@FreightCost").first.text
       @carton_count = @doc.xpath("//@CartonCount").first.text
@@ -45,6 +46,7 @@ module Documents
     def to_h
       {
         id: @shipment_number,
+        order_number: @customer_po,
         # NOTE: There may multiple tracking numbers. This is just the first.
         tracking: @tracking_number,
         warehouse: @warehouse,
