@@ -89,6 +89,19 @@ class QuietLogisticsEndpoint < EndpointBase::Sinatra::Base
     result code, message
   end
 
+  post '/cancel_shipment' do
+    begin
+      shipment = @payload['shipment']
+      message  = Api.send_document('CancelOrder', shipment, outgoing_bucket, outgoing_queue, @config)
+      code     = 200
+    rescue StandardError => e
+      message = e.message
+      code    = 500
+    end
+
+    result code, message
+  end
+  
   post '/add_purchase_order' do
     begin
       order = if @payload['transfer_order'].present?

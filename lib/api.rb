@@ -6,6 +6,8 @@ class Api
     case type
     when 'ShipmentOrder'
       Documents::ShipmentOrder.new(content, config)
+    when 'CancelOrder'
+      Documents::CancelOrder.new(content, config)
     when 'PurchaseOrder'
       Documents::PurchaseOrder.new(content, config)
     when 'ItemProfile'
