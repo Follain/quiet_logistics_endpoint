@@ -78,7 +78,8 @@ module Documents
       lines.map do |line|
         {
           itemno: line['ItemNumber'],
-          quantity: line['Quantity']
+          quantity: line['Quantity'],
+          line_number: line['Line']
         }
       end
     end
