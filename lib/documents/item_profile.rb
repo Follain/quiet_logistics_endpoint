@@ -21,6 +21,7 @@ module Documents
             'ItemSize' => item['size'],
             'ItemMaterial' => item['material'],
             'ItemColor' => item['color'],
+            'ItemStyle' => item['style'],
             'ItemDesc' => item_desc,
             'CommodityClass' => item['commodity_class'],
             'CommodityDesc' => item_desc,
