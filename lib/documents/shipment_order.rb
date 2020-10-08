@@ -15,12 +15,12 @@ module Documents
         xml.ShipOrderDocument('xmlns' => 'http://schemas.quietlogistics.com/V2/ShipmentOrder.xsd') {
           xml.ClientID @config['client_id']
           xml.BusinessUnit @config['business_unit']
-
+#      'Gift' => !!@shipment['gift']
           xml.OrderHeader('OrderNumber' => @shipment_number,
                           'OrderType'   => @shipment['order_type'] || 'SO',
                           'OrderDate'   => DateTime.now.iso8601,
                           'CustomerPO'  => @order_number,
-                          'Gift' => !!@shipment['gift']
+                          'Gift' => 'true'
                          ) {
 
             xml.Extension shipment['order_number']
