@@ -83,7 +83,12 @@ module Documents
     end
 
     def full_name
-      "#{shipment['shipping_address']['firstname']} #{@shipment['shipping_address']['lastname']}"
+      full_name=if  @shipment['shipping_address']['firstname'].blank? && 
+                    @shipment['shipping_address']['lastname'].blank?
+                  then  "#{@shipment['shipping_address']['company']} "
+                else
+                  "#{@shipment['shipping_address']['firstname']} #{@shipment['shipping_address']['lastname']}"
+                 end
     end
 
     def message
